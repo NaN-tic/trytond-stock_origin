@@ -2,19 +2,28 @@
 #The COPYRIGHT file at the top level of this repository contains 
 #the full copyright notices and license terms.
 
-from trytond.model import ModelView, ModelSQL, fields
-from trytond.transaction import Transaction
-from trytond.pool import Pool
+from trytond.model import fields
+from trytond.pool import Pool, PoolMeta
 
+__all__ = ['ShipmentOut']
+__metaclass__ = PoolMeta
 
-class ShipmentOut(ModelSQL, ModelView):
-    _name = 'stock.shipment.out'
+class ShipmentOut:
+    "Customer Shipment"
+    __name__ = 'stock.shipment.out'
 
-    origin = fields.Reference('Origin', selection='origin_get')
+    origin = fields.Reference('Origin', selection='get_origin')
 
-    def origin_get(self):
-        '''Origin get. Rewrite this method to add new origins'''
-        res = []
-        return res
+    @classmethod
+    def _get_origin(cls):
+        'Return list of Model names for origin Reference'
+        return []
 
-ShipmentOut()
+    @classmethod
+    def get_origin(cls):
+        Model = Pool().get('ir.model')
+        models = cls._get_origin()
+        models = Model.search([
+                ('model', 'in', models),
+                ])
+        return [('', '')] + [(m.model, m.name) for m in models]
