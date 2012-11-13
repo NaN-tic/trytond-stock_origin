@@ -33,14 +33,14 @@ setup(name='trytonzz_stock_origin',
     author='Zikzakmedia SL',
     author_email='zikzak@zikzakmedia.com',
     url='http://www.zikzakmedia.com',
-    download_url="https://bitbucket.org/zikzakmedia/trytonzz-stock_origin",
-    package_dir={'trytonzz.modules.stock_origin': '.'},
+    download_url="https://bitbucket.org/zikzakmedia/trytond-stock_origin",
+    package_dir={'trytond.modules.stock_origin': '.'},
     packages=[
-        'trytonzz.modules.stock_origin',
-        'trytonzz.modules.stock_origin.tests',
+        'trytond.modules.stock_origin',
+        'trytond.modules.stock_origin.tests',
     ],
     package_data={
-        'trytonzz.modules.stock_origin': info.get('xml', []) \
+        'trytond.modules.stock_origin': info.get('xml', []) \
             + ['tryton.cfg', 'locale/*.po'],
     },
     classifiers=[
@@ -63,9 +63,9 @@ setup(name='trytonzz_stock_origin',
     install_requires=requires,
     zip_safe=False,
     entry_points="""
-    [trytonzz.modules]
-    stock_origin = trytonzz.modules.stock_origin
+    [trytond.modules]
+    stock_origin = trytond.modules.stock_origin
     """,
     test_suite='tests',
-    test_loader='trytonzz.test_loader:Loader',
+    test_loader='trytond.test_loader:Loader',
 )
