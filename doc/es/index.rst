@@ -11,8 +11,8 @@ origen, instale los módulos correspondientes a su origen, por ejemplo:
 
 * `Albarán desde pedido de venta <../stock_origin_sale/index.html>`_
 
-Módulos que dependen
-====================
+Módulos de los que depende
+==========================
 
 Instalados
 ----------
