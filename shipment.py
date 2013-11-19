@@ -8,10 +8,9 @@ from trytond.pool import Pool, PoolMeta
 __all__ = ['ShipmentOut']
 __metaclass__ = PoolMeta
 
-class ShipmentOut:
-    "Customer Shipment"
-    __name__ = 'stock.shipment.out'
 
+class ShipmentOut:
+    __name__ = 'stock.shipment.out'
     origin = fields.Reference('Origin', selection='get_origin')
 
     @classmethod
