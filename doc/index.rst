@@ -1,4 +1,4 @@
-HelloWord Module
-###############
+Stock Origin Module
+###################
 
-The stock_origin module is example tryton module.
+The stock_origin module add related field in shipment out.

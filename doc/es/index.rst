@@ -1,8 +1,8 @@
-============
-Origen stock
-============
+==============================
+Stock. Procedencia del albarán
+==============================
 
-Añade la procedencia del albarán: venta, TPV...
+Añade la procedencia del albarán de salida para relacionar con: venta...
 
 Este módulo sólo añade el campo que relaciona un albarán con su origen.
 
