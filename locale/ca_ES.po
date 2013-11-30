@@ -5,3 +5,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 msgctxt "field:stock.shipment.out,origin:"
 msgid "Origin"
 msgstr "Origen"
+
+msgctxt "field:stock.shipment.out.return,origin:"
+msgid "Origin"
+msgstr "Origen"

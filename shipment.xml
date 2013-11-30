@@ -6,18 +6,23 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <record model="ir.ui.view" id="shipment_out_view_form">
             <field name="model">stock.shipment.out</field>
             <field name="inherit" ref="stock.shipment_out_view_form"/>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <data>
-                    <xpath
-                        expr="/form/field[@name=&quot;warehouse&quot;]"
-                        position="after">
-                            <label name="origin"/>
-                            <field name="origin"/>
-                    </xpath>
-                </data>
-                ]]>
-            </field>
+            <field name="name">shipment_out_form</field>
+        </record>
+        <record model="ir.ui.view" id="shipment_out_view_tree">
+            <field name="model">stock.shipment.out</field>
+            <field name="inherit" ref="stock.shipment_out_view_tree"/>
+            <field name="name">shipment_out_tree</field>
+        </record>
+
+        <record model="ir.ui.view" id="shipment_out_return_view_form">
+            <field name="model">stock.shipment.out.return</field>
+            <field name="inherit" ref="stock.shipment_out_return_view_form"/>
+            <field name="name">shipment_out_return_form</field>
+        </record>
+        <record model="ir.ui.view" id="shipment_out_return_view_tree">
+            <field name="model">stock.shipment.out.return</field>
+            <field name="inherit" ref="stock.shipment_out_return_view_tree"/>
+            <field name="name">shipment_out_return_tree</field>
         </record>
     </data>
 </tryton>
