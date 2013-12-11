@@ -47,7 +47,16 @@ class ShipmentOut:
 
 class ShipmentOutReturn:
     __name__ = 'stock.shipment.out.return'
-    origin = fields.Reference('Origin', selection='get_origin')
+    origin = fields.Function(fields.Reference('Origin', selection='get_origin'),
+        'get_origin_value')
+    origin_shipment = fields.Many2One('stock.shipment.out', 'Origin Shipment')
+
+    @classmethod
+    def __setup__(cls):
+        super(ShipmentOutReturn, cls).__setup__()
+        cls.__rpc__.update({
+                'get_origin': RPC(),
+                })
 
     @classmethod
     def _get_origin(cls):
@@ -62,6 +71,15 @@ class ShipmentOutReturn:
                 ('model', 'in', models),
                 ])
         return [('', '')] + [(m.model, m.name) for m in models]
+
+    @classmethod
+    def get_origin_value(cls, shipments, name):
+        origin = {}
+        for shipment in shipments:
+            origin[shipment.id] = (
+                'stock.shipment.out,%s' % (shipment.origin_shipment.id)
+                if shipment.origin_shipment else None)
+        return origin
 
 
 class CreateShipmentOutReturn:
@@ -79,6 +97,6 @@ class CreateShipmentOutReturn:
 
         for shipment_out, shipment_out_return in \
                 zip(shipment_outs, shipment_out_returns):
-            shipment_out_return.origin = shipment_out
+            shipment_out_return.origin_shipment = shipment_out
             shipment_out_return.save()
         return action, data

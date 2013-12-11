@@ -9,3 +9,7 @@ msgstr "Origen"
 msgctxt "field:stock.shipment.out.return,origin:"
 msgid "Origin"
 msgstr "Origen"
+
+msgctxt "field:stock.shipment.out.return,origin_shipment:"
+msgid "Origin Shipment"
+msgstr "Albarán origen"
