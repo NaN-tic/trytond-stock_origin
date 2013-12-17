@@ -11,4 +11,4 @@ def register():
         module='stock_origin', type_='model')
     Pool.register(
         CreateShipmentOutReturn,
-        module='stock', type_='wizard')
+        module='stock_origin', type_='wizard')
