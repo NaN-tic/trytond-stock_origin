@@ -15,6 +15,8 @@ class ShipmentOut:
     __name__ = 'stock.shipment.out'
     origin = fields.Function(fields.Reference('Origin', selection='get_origin'),
         'get_origin_value')
+    origin_info = fields.Function(fields.Char('Origin Info',
+            on_change_with=['origin']), 'on_change_with_origin_info')
 
     @classmethod
     def __setup__(cls):
@@ -44,11 +46,29 @@ class ShipmentOut:
             origin[shipment.id] = None
         return origin
 
+    def on_change_with_origin_info(self, name=None):
+        if self.origin:
+            model_origin = '%s' % self.origin.__name__
+            id_origin = self.origin.id
+
+            model = Pool().get('ir.model').search([('model', '=', model_origin)])[0]
+            origin = Pool().get(model_origin).browse([id_origin])[0]
+
+            if hasattr(origin, 'code'):
+                return '%s,%s' % (model.name, origin.code)
+            if hasattr(origin, 'reference'):
+                return '%s,%s' % (model.name, origin.reference)
+            else:
+                return '%s,%s' % (model.name, id_origin)
+        return None
+
 
 class ShipmentOutReturn:
     __name__ = 'stock.shipment.out.return'
     origin = fields.Function(fields.Reference('Origin', selection='get_origin'),
         'get_origin_value')
+    origin_info = fields.Function(fields.Char('Origin Info',
+            on_change_with=['origin']), 'on_change_with_origin_info')
     origin_shipment = fields.Many2One('stock.shipment.out', 'Origin Shipment')
 
     @classmethod
@@ -80,6 +100,22 @@ class ShipmentOutReturn:
                 'stock.shipment.out,%s' % (shipment.origin_shipment.id)
                 if shipment.origin_shipment else None)
         return origin
+
+    def on_change_with_origin_info(self, name=None):
+        if self.origin:
+            model_origin = '%s' % self.origin.__name__
+            id_origin = self.origin.id
+
+            model = Pool().get('ir.model').search([('model', '=', model_origin)])[0]
+            origin = Pool().get(model_origin).browse([id_origin])[0]
+
+            if hasattr(origin, 'code'):
+                return '%s,%s' % (model.name, origin.code)
+            if hasattr(origin, 'reference'):
+                return '%s,%s' % (model.name, origin.reference)
+            else:
+                return '%s,%s' % (model.name, id_origin)
+        return None
 
 
 class CreateShipmentOutReturn:
