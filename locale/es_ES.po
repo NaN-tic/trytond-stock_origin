@@ -6,9 +6,25 @@ msgctxt "field:stock.shipment.out,origin:"
 msgid "Origin"
 msgstr "Origen"
 
+msgctxt "field:stock.shipment.out,origin_cache:"
+msgid "Origin Cache"
+msgstr "Origen"
+
+msgctxt "field:stock.shipment.out,origin_info:"
+msgid "Origin Info"
+msgstr "Info origen"
+
 msgctxt "field:stock.shipment.out.return,origin:"
 msgid "Origin"
 msgstr "Origen"
+
+msgctxt "field:stock.shipment.out.return,origin_cache:"
+msgid "Origin Cache"
+msgstr "Origen"
+
+msgctxt "field:stock.shipment.out.return,origin_info:"
+msgid "Origin Info"
+msgstr "Info origen"
 
 msgctxt "field:stock.shipment.out.return,origin_shipment:"
 msgid "Origin Shipment"
