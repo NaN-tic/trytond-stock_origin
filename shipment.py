@@ -25,6 +25,7 @@ class ShipmentOut:
     __name__ = 'stock.shipment.out'
     origin = fields.Function(fields.Reference('Origin', selection='get_origin'),
         'get_origin_value')
+    origin_cache = fields.Char('Origin Cache')
     origin_info = fields.Function(fields.Char('Origin Info',
             on_change_with=['origin']), 'on_change_with_origin_info')
 
@@ -56,27 +57,51 @@ class ShipmentOut:
             origin[shipment.id] = None
         return origin
 
+    @staticmethod
+    def get_origin_name(origin):
+        pool = Pool()
+
+        model_origin = '%s' % origin.__name__
+        id_origin = origin.id
+
+        model = pool.get('ir.model').search([('model', '=', model_origin)])[0]
+        origin = pool.get(model_origin).browse([id_origin])[0]
+
+        if hasattr(origin, 'code'):
+            return '%s,%s' % (model.name, origin.code)
+        if hasattr(origin, 'reference'):
+            return '%s,%s' % (model.name, origin.reference)
+        else:
+            return '%s,%s' % (model.name, id_origin)
+
     def on_change_with_origin_info(self, name=None):
         if self.origin:
-            model_origin = '%s' % self.origin.__name__
-            id_origin = self.origin.id
-
-            model = Pool().get('ir.model').search([('model', '=', model_origin)])[0]
-            origin = Pool().get(model_origin).browse([id_origin])[0]
-
-            if hasattr(origin, 'code'):
-                return '%s,%s' % (model.name, origin.code)
-            if hasattr(origin, 'reference'):
-                return '%s,%s' % (model.name, origin.reference)
-            else:
-                return '%s,%s' % (model.name, id_origin)
+            return self.get_origin_name(self.origin)
         return None
+
+    @classmethod
+    def store_origin_cache(cls, shipments):
+        for shipment in shipments:
+            cls.write([shipment], {
+                    'origin_cache': cls.get_origin_name(shipment.origin),
+                    })
+
+    @classmethod
+    def cancel(cls, shipments):
+        super(ShipmentOut, cls).cancel(shipments)
+        cls.store_origin_cache(shipments)
+
+    @classmethod
+    def wait(cls, shipments):
+        super(ShipmentOut, cls).wait(shipments)
+        cls.store_origin_cache(shipments)
 
 
 class ShipmentOutReturn:
     __name__ = 'stock.shipment.out.return'
     origin = fields.Function(fields.Reference('Origin', selection='get_origin'),
         'get_origin_value')
+    origin_cache = fields.Char('Origin Cache')
     origin_info = fields.Function(fields.Char('Origin Info',
             on_change_with=['origin']), 'on_change_with_origin_info')
     origin_shipment = fields.Many2One('stock.shipment.out', 'Origin Shipment')
@@ -111,21 +136,44 @@ class ShipmentOutReturn:
                 if shipment.origin_shipment else None)
         return origin
 
+    @staticmethod
+    def get_origin_name(origin):
+        pool = Pool()
+
+        model_origin = '%s' % origin.__name__
+        id_origin = origin.id
+
+        model = pool.get('ir.model').search([('model', '=', model_origin)])[0]
+        origin = pool.get(model_origin).browse([id_origin])[0]
+
+        if hasattr(origin, 'code'):
+            return '%s,%s' % (model.name, origin.code)
+        if hasattr(origin, 'reference'):
+            return '%s,%s' % (model.name, origin.reference)
+        else:
+            return '%s,%s' % (model.name, id_origin)
+
     def on_change_with_origin_info(self, name=None):
         if self.origin:
-            model_origin = '%s' % self.origin.__name__
-            id_origin = self.origin.id
-
-            model = Pool().get('ir.model').search([('model', '=', model_origin)])[0]
-            origin = Pool().get(model_origin).browse([id_origin])[0]
-
-            if hasattr(origin, 'code'):
-                return '%s,%s' % (model.name, origin.code)
-            if hasattr(origin, 'reference'):
-                return '%s,%s' % (model.name, origin.reference)
-            else:
-                return '%s,%s' % (model.name, id_origin)
+            return self.get_origin_name(self.origin)
         return None
+
+    @classmethod
+    def store_origin_cache(cls, shipments):
+        for shipment in shipments:
+            cls.write([shipment], {
+                    'origin_cache': cls.get_origin_name(shipment.origin),
+                    })
+
+    @classmethod
+    def cancel(cls, shipments):
+        super(ShipmentOutReturn, cls).cancel(shipments)
+        cls.store_origin_cache(shipments)
+
+    @classmethod
+    def receive(cls, shipments):
+        super(ShipmentOutReturn, cls).receive(shipments)
+        cls.store_origin_cache(shipments)
 
 
 class CreateShipmentOutReturn:
