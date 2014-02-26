@@ -25,7 +25,7 @@ class ShipmentOut:
     __name__ = 'stock.shipment.out'
     origin = fields.Function(fields.Reference('Origin', selection='get_origin'),
         'get_origin_value')
-    origin_cache = fields.Char('Origin Cache')
+    origin_cache = fields.Reference('Origin Cache', selection='get_origin')
     origin_info = fields.Function(fields.Char('Origin Info',
             on_change_with=['origin']), 'on_change_with_origin_info')
 
@@ -58,14 +58,20 @@ class ShipmentOut:
         return origin
 
     @staticmethod
-    def get_origin_name(origin):
+    def get_origin_name(origin, cache=None):
         pool = Pool()
+
+        if not origin:
+            return None
 
         model_origin = '%s' % origin.__name__
         id_origin = origin.id
 
-        model = pool.get('ir.model').search([('model', '=', model_origin)])[0]
-        origin = pool.get(model_origin).browse([id_origin])[0]
+        model, = pool.get('ir.model').search([('model', '=', model_origin)], limit=1)
+        origin, = pool.get(model_origin).browse([id_origin])
+
+        if cache:
+            return '%s,%s' % (origin.__name__, id_origin)
 
         if hasattr(origin, 'code'):
             return '%s,%s' % (model.name, origin.code)
@@ -83,7 +89,7 @@ class ShipmentOut:
     def store_origin_cache(cls, shipments):
         for shipment in shipments:
             cls.write([shipment], {
-                    'origin_cache': cls.get_origin_name(shipment.origin),
+                    'origin_cache': cls.get_origin_name(shipment.origin, cache=True),
                     })
 
     @classmethod
@@ -101,7 +107,7 @@ class ShipmentOutReturn:
     __name__ = 'stock.shipment.out.return'
     origin = fields.Function(fields.Reference('Origin', selection='get_origin'),
         'get_origin_value')
-    origin_cache = fields.Char('Origin Cache')
+    origin_cache = fields.Reference('Origin Cache', selection='get_origin')
     origin_info = fields.Function(fields.Char('Origin Info',
             on_change_with=['origin']), 'on_change_with_origin_info')
     origin_shipment = fields.Many2One('stock.shipment.out', 'Origin Shipment')
@@ -137,14 +143,20 @@ class ShipmentOutReturn:
         return origin
 
     @staticmethod
-    def get_origin_name(origin):
+    def get_origin_name(origin, cache=None):
         pool = Pool()
+
+        if not origin:
+            return None
 
         model_origin = '%s' % origin.__name__
         id_origin = origin.id
 
-        model = pool.get('ir.model').search([('model', '=', model_origin)])[0]
-        origin = pool.get(model_origin).browse([id_origin])[0]
+        model, = pool.get('ir.model').search([('model', '=', model_origin)], limit=1)
+        origin, = pool.get(model_origin).browse([id_origin])
+
+        if cache:
+            return '%s,%s' % (origin.__name__, id_origin)
 
         if hasattr(origin, 'code'):
             return '%s,%s' % (model.name, origin.code)
@@ -162,7 +174,7 @@ class ShipmentOutReturn:
     def store_origin_cache(cls, shipments):
         for shipment in shipments:
             cls.write([shipment], {
-                    'origin_cache': cls.get_origin_name(shipment.origin),
+                    'origin_cache': cls.get_origin_name(shipment.origin, cache=True),
                     })
 
     @classmethod
