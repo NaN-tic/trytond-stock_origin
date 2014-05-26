@@ -26,8 +26,8 @@ class ShipmentOut:
     origin = fields.Function(fields.Reference('Origin', selection='get_origin'),
         'get_origin_value')
     origin_cache = fields.Reference('Origin Cache', selection='get_origin')
-    origin_info = fields.Function(fields.Char('Origin Info',
-            on_change_with=['origin']), 'on_change_with_origin_info')
+    origin_info = fields.Function(fields.Char('Origin Info'),
+        'on_change_with_origin_info')
 
     @classmethod
     def __setup__(cls):
@@ -80,6 +80,7 @@ class ShipmentOut:
         else:
             return '%s,%s' % (model.name, id_origin)
 
+    @fields.depends('origin')
     def on_change_with_origin_info(self, name=None):
         if self.origin:
             return self.get_origin_name(self.origin)
@@ -108,8 +109,8 @@ class ShipmentOutReturn:
     origin = fields.Function(fields.Reference('Origin', selection='get_origin'),
         'get_origin_value')
     origin_cache = fields.Reference('Origin Cache', selection='get_origin')
-    origin_info = fields.Function(fields.Char('Origin Info',
-            on_change_with=['origin']), 'on_change_with_origin_info')
+    origin_info = fields.Function(fields.Char('Origin Info'),
+        'on_change_with_origin_info')
     origin_shipment = fields.Many2One('stock.shipment.out', 'Origin Shipment')
 
     @classmethod
@@ -165,6 +166,7 @@ class ShipmentOutReturn:
         else:
             return '%s,%s' % (model.name, id_origin)
 
+    @fields.depends('origin')
     def on_change_with_origin_info(self, name=None):
         if self.origin:
             return self.get_origin_name(self.origin)
