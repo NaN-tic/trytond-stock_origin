@@ -4,10 +4,9 @@
 
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
-from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
-__all__ = ['Move', 'ShipmentOut', 'ShipmentOutReturn', 'CreateShipmentOutReturn']
+__all__ = ['Move', 'ShipmentOut', 'ShipmentOutReturn']
 __metaclass__ = PoolMeta
 
 
@@ -188,35 +187,3 @@ class ShipmentOutReturn:
     def receive(cls, shipments):
         super(ShipmentOutReturn, cls).receive(shipments)
         cls.store_origin_cache(shipments)
-
-
-class CreateShipmentOutReturn:
-    __name__ = 'stock.shipment.out.return.create'
-
-    #~ More efiency apply codereview:
-    #~ https://bugs.tryton.org/issue3561
-    #~ http://codereview.tryton.org/2391002/
-    #~ http://codereview.tryton.org/2361002/
-
-    def do_start(self, action):
-        pool = Pool()
-        ShipmentOut = pool.get('stock.shipment.out')
-        ShipmentOutReturn = pool.get('stock.shipment.out.return')
-        Move = pool.get('stock.move')
-
-        action, data = super(CreateShipmentOutReturn, self).do_start(action)
-        shipment_ids = Transaction().context['active_ids']
-        shipment_outs = ShipmentOut.browse(shipment_ids)
-        shipment_out_returns = ShipmentOutReturn.browse(data['res_id'])
-
-        for shipment_out, shipment_out_return in \
-                zip(shipment_outs, shipment_out_returns):
-            shipment_out_return.origin_shipment = shipment_out
-            shipment_out_return.save()
-
-            if shipment_out_return.incoming_moves:
-                Move.write(shipment_out_return.incoming_moves, {
-                    'origin': 'stock.shipment.out,%s' % shipment_out.id,
-                    })
-
-        return action, data
