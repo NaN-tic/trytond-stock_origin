@@ -16,7 +16,8 @@ class Move:
     @classmethod
     def _get_origin(cls):
         models = super(Move, cls)._get_origin()
-        models.append('stock.shipment.out')
+        if not 'stock.shipment.out' in models:
+            models.append('stock.shipment.out')
         return models
 
 
