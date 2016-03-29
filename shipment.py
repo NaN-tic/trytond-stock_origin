@@ -7,10 +7,10 @@ from trytond.pool import Pool, PoolMeta
 from trytond.rpc import RPC
 
 __all__ = ['Move', 'ShipmentOut', 'ShipmentOutReturn']
-__metaclass__ = PoolMeta
 
 
 class Move:
+    __metaclass__ = PoolMeta
     __name__ = 'stock.move'
 
     @classmethod
@@ -22,6 +22,7 @@ class Move:
 
 
 class ShipmentOut:
+    __metaclass__ = PoolMeta
     __name__ = 'stock.shipment.out'
     origin = fields.Function(fields.Reference('Origin', selection='get_origin'),
         'get_origin_value')
@@ -105,6 +106,7 @@ class ShipmentOut:
 
 
 class ShipmentOutReturn:
+    __metaclass__ = PoolMeta
     __name__ = 'stock.shipment.out.return'
     origin = fields.Function(fields.Reference('Origin', selection='get_origin'),
         'get_origin_value')
