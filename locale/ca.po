@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -14,6 +14,10 @@ msgctxt "field:stock.shipment.out,origin_info:"
 msgid "Origin Info"
 msgstr "Info origen"
 
+msgctxt "field:stock.shipment.out,origin_reference:"
+msgid "Origin Reference"
+msgstr "Referencia origen"
+
 msgctxt "field:stock.shipment.out.return,origin:"
 msgid "Origin"
 msgstr "Origen"
@@ -25,6 +29,10 @@ msgstr "Origen"
 msgctxt "field:stock.shipment.out.return,origin_info:"
 msgid "Origin Info"
 msgstr "Info origen"
+
+msgctxt "field:stock.shipment.out.return,origin_reference:"
+msgid "Origin Reference"
+msgstr "Referencia origen"
 
 msgctxt "field:stock.shipment.out.return,origin_shipment:"
 msgid "Origin Shipment"
