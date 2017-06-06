@@ -1,5 +1,5 @@
 #This file is part stock_origin module for Tryton.
-#The COPYRIGHT file at the top level of this repository contains 
+#The COPYRIGHT file at the top level of this repository contains
 #the full copyright notices and license terms.
 
 from trytond.model import fields
@@ -60,39 +60,40 @@ class ShipmentOut:
 
     @staticmethod
     def get_origin_name(origin, cache=None):
-        pool = Pool()
+        Model = Pool().get('ir.model')
 
         if not origin:
-            return None
+            return
 
-        model_origin = '%s' % origin.__name__
-        id_origin = origin.id
-
-        model, = pool.get('ir.model').search([('model', '=', model_origin)], limit=1)
-        origin, = pool.get(model_origin).browse([id_origin])
+        model, = Model.search([('model', '=', origin.__name__)], limit=1)
 
         if cache:
-            return '%s,%s' % (origin.__name__, id_origin)
+            return '%s,%s' % (origin.__name__, origin.id)
 
         if hasattr(origin, 'code'):
             return '%s,%s' % (model.name, origin.code)
+        if hasattr(origin, 'number'):
+            return '%s,%s' % (model.name, origin.number)
         if hasattr(origin, 'reference'):
             return '%s,%s' % (model.name, origin.reference)
         else:
-            return '%s,%s' % (model.name, id_origin)
+            return '%s,%s' % (model.name, origin.id)
 
     @fields.depends('origin')
     def on_change_with_origin_info(self, name=None):
         if self.origin:
-            return self.get_origin_name(self.origin)
-        return None
+            origin = self.origin_cache if self.origin_cache else self.origin
+            return self.get_origin_name(origin)
 
     @classmethod
     def store_origin_cache(cls, shipments):
+        to_write = []
         for shipment in shipments:
-            cls.write([shipment], {
-                    'origin_cache': cls.get_origin_name(shipment.origin, cache=True),
-                    })
+            to_write.extend(([shipment], {
+                'origin_cache': cls.get_origin_name(shipment.origin, cache=True),
+                }))
+        if to_write:
+            cls.write(*to_write)
 
     @classmethod
     def cancel(cls, shipments):
@@ -147,26 +148,24 @@ class ShipmentOutReturn:
 
     @staticmethod
     def get_origin_name(origin, cache=None):
-        pool = Pool()
+        Model = Pool().get('ir.model')
 
         if not origin:
-            return None
+            return
 
-        model_origin = '%s' % origin.__name__
-        id_origin = origin.id
-
-        model, = pool.get('ir.model').search([('model', '=', model_origin)], limit=1)
-        origin, = pool.get(model_origin).browse([id_origin])
+        model, = Model.search([('model', '=', origin.__name__)], limit=1)
 
         if cache:
-            return '%s,%s' % (origin.__name__, id_origin)
+            return '%s,%s' % (origin.__name__, origin.id)
 
         if hasattr(origin, 'code'):
             return '%s,%s' % (model.name, origin.code)
+        if hasattr(origin, 'number'):
+            return '%s,%s' % (model.name, origin.number)
         if hasattr(origin, 'reference'):
             return '%s,%s' % (model.name, origin.reference)
         else:
-            return '%s,%s' % (model.name, id_origin)
+            return '%s,%s' % (model.name, origin.id)
 
     @fields.depends('origin')
     def on_change_with_origin_info(self, name=None):
@@ -176,10 +175,13 @@ class ShipmentOutReturn:
 
     @classmethod
     def store_origin_cache(cls, shipments):
+        to_write = []
         for shipment in shipments:
-            cls.write([shipment], {
-                    'origin_cache': cls.get_origin_name(shipment.origin, cache=True),
-                    })
+            to_write.extend(([shipment], {
+                'origin_cache': cls.get_origin_name(shipment.origin, cache=True),
+                }))
+        if to_write:
+            cls.write(*to_write)
 
     @classmethod
     def cancel(cls, shipments):
