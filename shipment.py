@@ -29,6 +29,8 @@ class ShipmentOut:
     origin_cache = fields.Reference('Origin Cache', selection='get_origin')
     origin_info = fields.Function(fields.Char('Origin Info'),
         'on_change_with_origin_info')
+    origin_reference = fields.Function(fields.Char('Origin Reference'),
+        'get_origin_reference', searcher='search_origin_reference_field')
 
     @classmethod
     def __setup__(cls):
@@ -85,6 +87,16 @@ class ShipmentOut:
             origin = self.origin_cache if self.origin_cache else self.origin
             return self.get_origin_name(origin)
 
+    def get_origin_reference(self, name):
+        origin = self.origin_cache if self.origin_cache else self.origin
+        if hasattr(origin, 'reference'):
+            return origin.reference
+
+    @classmethod
+    def search_origin_reference_field(cls, name, clause):
+        # TODO
+        return []
+
     @classmethod
     def store_origin_cache(cls, shipments):
         to_write = []
@@ -115,6 +127,8 @@ class ShipmentOutReturn:
     origin_info = fields.Function(fields.Char('Origin Info'),
         'on_change_with_origin_info')
     origin_shipment = fields.Many2One('stock.shipment.out', 'Origin Shipment')
+    origin_reference = fields.Function(fields.Char('Origin Reference'),
+        'get_origin_reference', searcher='search_origin_reference_field')
 
     @classmethod
     def __setup__(cls):
@@ -172,6 +186,16 @@ class ShipmentOutReturn:
         if self.origin:
             return self.get_origin_name(self.origin)
         return None
+
+    def get_origin_reference(self, name):
+        origin = self.origin_cache if self.origin_cache else self.origin
+        if hasattr(origin, 'reference'):
+            return origin.reference
+
+    @classmethod
+    def search_origin_reference_field(cls, name, clause):
+        # TODO
+        return []
 
     @classmethod
     def store_origin_cache(cls, shipments):
