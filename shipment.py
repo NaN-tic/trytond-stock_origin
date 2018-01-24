@@ -1,6 +1,6 @@
-#This file is part stock_origin module for Tryton.
-#The COPYRIGHT file at the top level of this repository contains
-#the full copyright notices and license terms.
+# This file is part stock_origin module for Tryton.
+# The COPYRIGHT file at the top level of this repository contains the full
+# copyright notices and license terms.
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
 
@@ -9,7 +9,8 @@ __all__ = ['Move', 'ShipmentOut', 'ShipmentOutReturn']
 
 class StockOriginMixin(object):
     "Mixin Stock Origin"
-    origin = fields.Function(fields.Reference('Origin', selection='get_origin'),
+    origin = fields.Function(fields.Reference(
+            'Origin', selection='get_origin'),
         'get_origin_value')
     origin_cache = fields.Reference('Origin Cache', selection='get_origin')
     origin_info = fields.Function(fields.Char('Origin Info'),
@@ -109,7 +110,8 @@ class StockOriginMixin(object):
             if shipment.origin_cache:
                 continue
             to_write.extend(([shipment], {
-                'origin_cache': cls.get_origin_name(shipment.origin, cache=True),
+                'origin_cache': cls.get_origin_name(
+                            shipment.origin, cache=True),
                 }))
         if to_write:
             cls.write(*to_write)
@@ -122,7 +124,7 @@ class Move:
     @classmethod
     def _get_origin(cls):
         models = super(Move, cls)._get_origin()
-        if not 'stock.shipment.out' in models:
+        if 'stock.shipment.out' not in models:
             models.append('stock.shipment.out')
         return models
 
