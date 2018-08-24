@@ -117,8 +117,7 @@ class StockOriginMixin(object):
             cls.write(*to_write)
 
 
-class Move:
-    __metaclass__ = PoolMeta
+class Move(metaclass=PoolMeta):
     __name__ = 'stock.move'
 
     @classmethod
@@ -129,8 +128,7 @@ class Move:
         return models
 
 
-class ShipmentOut(StockOriginMixin):
-    __metaclass__ = PoolMeta
+class ShipmentOut(StockOriginMixin, metaclass=PoolMeta):
     __name__ = 'stock.shipment.out'
 
     @classmethod
@@ -151,8 +149,7 @@ class ShipmentOut(StockOriginMixin):
         cls.store_origin_cache(shipments)
 
 
-class ShipmentOutReturn(StockOriginMixin):
-    __metaclass__ = PoolMeta
+class ShipmentOutReturn(StockOriginMixin, metaclass=PoolMeta):
     __name__ = 'stock.shipment.out.return'
     origin_shipment = fields.Many2One('stock.shipment.out', 'Origin Shipment')
 
