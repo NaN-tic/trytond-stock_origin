@@ -8,7 +8,7 @@ __all__ = ['Move', 'ShipmentOut', 'ShipmentOutReturn']
 
 
 class StockOriginMixin(object):
-    "Mixin Stock Origin"
+    __slots__ = ()
     origin = fields.Function(fields.Reference(
             'Origin', selection='get_origin'),
         'get_origin_value')
