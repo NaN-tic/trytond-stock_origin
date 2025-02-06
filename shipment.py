@@ -40,7 +40,7 @@ class StockOriginMixin(object):
         Model = Pool().get('ir.model')
         models = cls._get_origin()
         models = Model.search([
-                ('model', 'in', models),
+                ('name', 'in', models),
                 ])
         return [('', '')] + [(m.model, m.name) for m in models]
 
@@ -51,7 +51,7 @@ class StockOriginMixin(object):
         if not origin:
             return
 
-        model, = Model.search([('model', '=', origin.__name__)], limit=1)
+        model, = Model.search([('name', '=', origin.__name__)], limit=1)
 
         if cache:
             return '%s,%s' % (origin.__name__, origin.id)
