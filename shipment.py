@@ -144,8 +144,8 @@ class ShipmentOut(StockOriginMixin, metaclass=PoolMeta):
         cls.store_origin_cache(shipments)
 
     @classmethod
-    def wait(cls, shipments):
-        super(ShipmentOut, cls).wait(shipments)
+    def wait(cls, shipments, moves=None):
+        super(ShipmentOut, cls).wait(shipments, moves)
         cls.store_origin_cache(shipments)
 
 
