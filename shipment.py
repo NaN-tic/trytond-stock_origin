@@ -57,13 +57,13 @@ class StockOriginMixin(object):
             return '%s,%s' % (origin.__name__, origin.id)
 
         if hasattr(origin, 'code'):
-            return '%s,%s' % (model.name, origin.code)
+            return '%s,%s' % (model.string, origin.code)
         if hasattr(origin, 'number'):
-            return '%s,%s' % (model.name, origin.number)
+            return '%s,%s' % (model.string, origin.number)
         if hasattr(origin, 'reference'):
-            return '%s,%s' % (model.name, origin.reference)
+            return '%s,%s' % (model.string, origin.reference)
         else:
-            return '%s,%s' % (model.name, origin.id)
+            return '%s,%s' % (model.string, origin.id)
 
     @fields.depends('origin')
     def on_change_with_origin_info(self, name=None):
