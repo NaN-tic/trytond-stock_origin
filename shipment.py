@@ -21,6 +21,10 @@ class StockOriginMixin(object):
         'get_origin_reference', searcher='search_origin_reference_field')
 
     @classmethod
+    def get_origin_value(cls, shipments, name):
+        pass
+
+    @classmethod
     def _get_origin(cls):
         'Model names that use in reference type field'
         return []
