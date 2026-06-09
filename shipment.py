@@ -55,10 +55,17 @@ class StockOriginMixin(object):
         if not origin:
             return
 
-        model, = Model.search([('name', '=', origin.__name__)], limit=1)
+        model_name = getattr(origin, '__name__', None)
+        if not model_name:
+            return
+
+        models = Model.search([('name', '=', model_name)], limit=1)
+        if not models:
+            return
+        model, = models
 
         if cache:
-            return '%s,%s' % (origin.__name__, origin.id)
+            return '%s,%s' % (model_name, origin.id)
 
         if hasattr(origin, 'code'):
             return '%s,%s' % (model.string, origin.code)
